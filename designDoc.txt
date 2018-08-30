@@ -1,0 +1,59 @@
+
+// This is the design doc. for this personnel-management project.
+
+1. Database design & reasons:
+
+
+2. REST API specification:
+
+
+3. API functions at NodeJS/ExpressJS:
+
+
+4. UI:
+
+
+5. React components hierarchy/states/props & Redux store specification:
+
+
+6. Features/pages to have:
+    
+    (1) Home page, list/dir. of all people.
+        with name / pic. / title / # of direct reports / other...
+        sub-features: 
+            sorting / search / infinite scrolling
+            onClick of a person - go to his/her page
+            Add btn. for adding new people
+            
+    (2) Staff details page.
+        details info
+            View manager (only one / none)
+            View direct reports (list/array)
+            Call office/cell, invoke phone app
+            Send email, invoke email app
+            Edit btn, which can change / remove info & relationships
+            Back btn, to Home page.
+            
+    (3) Direct reports list page.
+        with name / pic. / direct reports
+        onClick of a person - go to his/her page   
+        Back btn, go back to the original person's details page.    
+    
+    Notes: 
+        pic. file upload (into a static folder) in Add new.
+        the relationships (manager & report_to) can't form a 'circle' among staff.
+        display full-image in Edit and thumbnail in lists.
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
