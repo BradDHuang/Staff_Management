@@ -2,7 +2,7 @@
 import { GET_STAFF, ADD_STAFF, DELETE_STAFF, STAFF_LOADING } from "../actions/types";
 
 const initialState = {
-    staff: [],
+    members: [],
     loading: false
 };
 
@@ -11,20 +11,20 @@ export default function(state = initialState, action) {
         case GET_STAFF:
             return {
                 ...state,
-                staff: action.payload,
+                members: action.payload,
                 loading: false
             };
             
         case DELETE_STAFF:
             return {
                 ...state,
-                staff: state.staff.filter(member => member._id !== action.payload)
+                members: state.members.filter(member => member._id !== action.payload)
             };
             
         case ADD_STAFF:
             return {
                 ...state,
-                staff: [action.payload, ...state.staff]
+                members: [action.payload, ...state.members]
             };
         
         case STAFF_LOADING:

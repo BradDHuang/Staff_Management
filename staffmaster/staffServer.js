@@ -29,26 +29,14 @@ app.get("/api/staff", (req, res) => {
 });
 
 app.post("/api/staff", (req, res) => {
-    // let member = new Staff();
+    console.log("Created a new member.");
     console.log(req.body);
-    // member.fullName = req.body.fullName;
-    // member.save((err) => {
-    //     if (err) {
-    //         res.status(500).json(err);
-    //     } else {
-    //         console.log("Created a new member.");
-    //         res.status(200).json(member);
-    //     }
-    // });
-    Staff.create(req.body, (err, member) => {
-        if (err) {
-            res.status(500).json(err);
-        } else {
-            console.log("Created a new member.");
-            res.status(200).json(member);
-        }
-        // saved!
+    const newMember = new Staff({
+        name: req.body.name,
     });
+    newMember
+        .save()
+        .then(member => res.json(member));
 });
 
 app.get("/api/staff/:id", (req, res) => {

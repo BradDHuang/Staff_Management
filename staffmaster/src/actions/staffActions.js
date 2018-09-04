@@ -1,10 +1,11 @@
 
 import { GET_STAFF, ADD_STAFF, DELETE_STAFF, STAFF_LOADING } from "./types";
 import axios from "axios";
+import qs from "qs";
 
 export const getStaff = () => dispatch => {
     dispatch(setStaffLoading());
-    axios({method: "get", url: "https://personnel-management-happitt.c9users.io:8081/api/items"})
+    axios({method: "get", url: "https://personnel-management-happitt.c9users.io:8081/api/staff"})
         .then(res => 
             dispatch({
                 type: GET_STAFF,
@@ -13,11 +14,11 @@ export const getStaff = () => dispatch => {
         );
 };
 
-export const addStaff = (member) => dispatch => {
+export const addStaff = (staff) => dispatch => {
     axios({
         method: "post", 
-        url: "https://personnel-management-happitt.c9users.io:8081/api/items",
-        data: member
+        url: "https://personnel-management-happitt.c9users.io:8081/api/staff",
+        data: qs.stringify(staff)
     })
         .then(res => 
             dispatch({
@@ -30,7 +31,7 @@ export const addStaff = (member) => dispatch => {
 export const deleteStaff = (id) => dispatch => {
     axios({
         method: "delete", 
-        url: `https://personnel-management-happitt.c9users.io:8081/api/items/${id}`,
+        url: `https://personnel-management-happitt.c9users.io:8081/api/staff/${id}`,
     })
         .then(res => 
             dispatch({
