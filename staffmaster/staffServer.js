@@ -51,6 +51,50 @@ app.post("/api/staff", (req, res) => {
     });
 });
 
+app.get("/api/staff/:id", (req, res) => {
+    Staff.findById(req.params.id, (err, member) => {
+        if (err) {
+            res.status(500).json(err);
+        } else {
+            res.status(200).json(member);
+        }
+    });
+});
+
+app.put("/api/staff/:id", (req, res) => {
+    let id = req.params.id;
+    Staff.findById(id, (err, member) => {
+        if (err) {
+            res.status(500).json(err);
+        } else {
+            console.log(req.body);
+            member.fullName = req.body.fullName;
+            member.save((err) => {
+                if (err) {
+                    res.status(500).json(err);
+                } else {
+                    console.log("Edited a staff member.");
+                    Staff.findById(id, (err, member) => {
+                        if (err) {
+                            res.status(500).json(err);
+                        } else {
+                            res.status(200).json(member);
+                        }
+                    });
+                }
+            });
+        }
+    });
+});
+
+app.delete("/api/staff/:id", (req, res) => {
+    Staff.findById(req.params.id)
+        .then(member => member
+            .remove()
+            .then(() => res.status(200).json({ success: true })))
+        .catch(err => res.status(500).json(err));
+});
+
 app.listen(port, () => {
     console.log(`The staffmaster server has started on port ${port}...`);
 });
