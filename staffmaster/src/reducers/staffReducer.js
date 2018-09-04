@@ -1,36 +1,33 @@
 
-import { GET_STAFF, ADD_STAFF, DELETE_STAFF, STAFF_LOADING } from "../actions/types";
+import { FETCH_STAFF_REQUEST, FETCH_STAFF_SUCCESS, FETCH_STAFF_FAIL } from "../actions/types";
 
 const initialState = {
-    members: [],
-    loading: false
+    staff: [],
+    loading: false,
+    err: ""
 };
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case GET_STAFF:
-            return {
-                ...state,
-                members: action.payload,
-                loading: false
-            };
-            
-        case DELETE_STAFF:
-            return {
-                ...state,
-                members: state.members.filter(member => member._id !== action.payload)
-            };
-            
-        case ADD_STAFF:
-            return {
-                ...state,
-                members: [...state.members, action.payload]
-            };
-        
-        case STAFF_LOADING:
+        case FETCH_STAFF_REQUEST:
             return {
                 ...state,
                 loading: true
+            };
+            
+        case FETCH_STAFF_SUCCESS:
+            return {
+                ...state,
+                staff: action.staff,
+                loading: false,
+                err: ""
+            };
+            
+        case FETCH_STAFF_FAIL:
+            return {
+                ...state,
+                loading: false,
+                err: action.err
             };
         
         default:

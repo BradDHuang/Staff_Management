@@ -1,38 +1,67 @@
 
 import React, {Component} from "react";
-import { Container, ListGroup, ListGroupItem, Button} from "reactstrap";
+import { Container, ListGroup, ListGroupItem} from "reactstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { connect } from "react-redux";
-import { getStaff, deleteStaff } from "../actions/staffActions";
+import { getStaff } from "../actions/staffActions";
+// import { Link } from "react-router-dom";
+// import InfiniteScroller from "react-infinite-scroller";
+// import * as actions from "../actions/staffActions";
+// import { ClipLoader } from "react-spinners";
+
+// const Loading = props => {
+//   return (
+//     <div className="loading">
+//       <ClipLoader loading={true} size={150} color={"#123abc"}/> 
+//     </div>
+//   );
+// };
+
+// const List = props => {
+//   return (
+//     <li className="list">
+      
+//       <div className="li-mid">
+//         <Link to={`/detail/${props.data._id}`}>
+//           <div className="li-name">
+//             {props.data.fullName}
+//           </div>
+//         </Link>
+//         <div className="li-title">{props.data.title}</div>
+//       </div>
+//       <div className="li-reports">{props.data.directReports.length}</div>
+//       <Link to={`/detail/${props.data._id}`}>
+//         <i className="fas fa-angle-right" id="li-arrow" />
+//       </Link>
+//     </li>
+//   );
+// };
 
 class StaffList extends Component {
-    
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
     componentDidMount() {
         this.props.getStaff();
     }
-    onDeleteClick = (id) => {
-        this.props.deleteStaff(id);
-    }
+    // onDeleteClick = (id) => {
+    //     this.props.deleteStaff(id);
+    // }
     render() {
-        const { members } = this.props.staff;
+        const { staff } = this.props.staff;
         return (
             <Container>
-                
+                <h1>Staff Directory</h1>
                 <ListGroup>
                     <TransitionGroup className="shopping-list">
-                        {members.map(({ _id, fullName }) => (
+                        {staff.map(({ _id, fullName }) => (
                             <CSSTransition key={_id}
                                 timeout={500}
                                 classNames="fade"
                             >
                                 <ListGroupItem>
-                                    <Button
-                                        className="remove-btn"
-                                        color="danger"
-                                        size="sm"
-                                        onClick={() => this.onDeleteClick(_id)}
-                                    >&times;
-                                    </Button>
+                                    
                                     {fullName}
                                 </ListGroupItem>
                             </CSSTransition>
@@ -48,7 +77,7 @@ const mapStateToProps = (state) => ({
     staff: state.staff,
 });
 
-export default connect(mapStateToProps, { getStaff, deleteStaff })(StaffList);
+export default connect(mapStateToProps, { getStaff })(StaffList);
 
 
 

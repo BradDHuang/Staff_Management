@@ -21,9 +21,7 @@ app.get("/api/staff", (req, res) => {
             res.status(500).json(err);
         } else {
             console.log("Getting all staff members.");
-            let staffArray = [];
-            staff.forEach(member => staffArray.push(member)); 
-            res.status(200).json(staffArray);
+            res.status(200).json({ staff });
         }
     });
 });
@@ -31,12 +29,19 @@ app.get("/api/staff", (req, res) => {
 app.post("/api/staff", (req, res) => {
     console.log("Created a new member.");
     console.log(req.body);
-    const newMember = new Staff({
-        fullName: req.body.fullName,
+    Staff.create(req.body, (err, staff) => {
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        Staff.find((err, staff) => {
+          if (err) {
+            res.status(500).json(err);
+          } else {
+            res.status(200).json({ staff });
+          }
+        });
+      }
     });
-    newMember
-        .save()
-        .then(member => res.json(member));
 });
 
 app.get("/api/staff/:id", (req, res) => {
