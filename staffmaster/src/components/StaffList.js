@@ -48,6 +48,9 @@ class StaffList extends Component {
     // onDeleteClick = (id) => {
     //     this.props.deleteStaff(id);
     // }
+    onDetailClick = (id) => {
+        console.log(`you are going to staff detail with id: ${id}.`);
+    }
     render() {
         const { staff } = this.props.staff;
         return (
@@ -55,14 +58,19 @@ class StaffList extends Component {
                 <h1>Staff Directory</h1>
                 <ListGroup>
                     <TransitionGroup className="shopping-list">
-                        {staff.map(({ _id, fullName }) => (
+                        {staff.map(({ _id, fullName, title, directReports }) => (
                             <CSSTransition key={_id}
                                 timeout={500}
                                 classNames="fade"
                             >
                                 <ListGroupItem>
-                                    
-                                    {fullName}
+                                    {fullName}{" | "}
+                                    {title}{" | "}
+                                    {directReports.length}{" "}
+                                    <i onClick={() => this.onDetailClick(_id)} 
+                                        style={{color: "deepskyblue"}} 
+                                        className="fas fa-chevron-right">
+                                    </i>
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}
