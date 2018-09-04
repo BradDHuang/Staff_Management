@@ -112,8 +112,32 @@
         display full-image in Edit and thumbnail in lists.
         
 
+Operations:
+(1) getList()
 
+(2) New {
+    insert
+    manager? update-manager & his/her report_to : none
+    // use express server to "insert & update".
+}
 
+(3) Edit {
+    1. none -> none (A -> A) // unchanged
+    2. none -> A
+    3. A -> none
+    4. A -> B
+    
+    name-change?
+}
+
+(4) Delete {
+    1. no manager & no report_to
+    2. manager & no report_to // update manager
+    3. no manager & report_to // update report_to
+    4. manager & report_to // update both
+    
+    // delete relationships first, then the record.
+}
 
 
 
