@@ -6,12 +6,14 @@ import store from "./store";
 import {Container} from "reactstrap";
 import StaffList from "./components/StaffList";
 import StaffModal from "./components/StaffModal";
+import AppNavbar from "./components/AppNavbar";
 
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
       <div>
+        <AppNavbar />
         <Container>
           <StaffModal />
           <StaffList />
