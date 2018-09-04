@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var StaffSchema = new Schema({
-    name: String,
+    fullName: String,
     title: String,
     sex: String,
     avatar: String,

@@ -18,7 +18,7 @@ class StaffModal extends Component {
         super(props);
         this.state = {
             modal: false,
-            name: "",
+            fullName: "",
         };
     }
     toggle = () => {
@@ -31,7 +31,7 @@ class StaffModal extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         const newMember = {
-            name: this.state.name,
+            fullName: this.state.fullName,
         };
         console.log(newMember);
         this.props.addStaff(newMember);
@@ -66,7 +66,7 @@ class StaffModal extends Component {
                                 </Label>
                                 <Input 
                                     type="text"
-                                    name="name"
+                                    name="fullName"
                                     id="member"
                                     placeholder="Add staff member"
                                     onChange={this.onChange}

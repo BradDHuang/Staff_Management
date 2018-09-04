@@ -32,7 +32,7 @@ app.post("/api/staff", (req, res) => {
     console.log("Created a new member.");
     console.log(req.body);
     const newMember = new Staff({
-        name: req.body.name,
+        fullName: req.body.fullName,
     });
     newMember
         .save()

@@ -24,7 +24,7 @@ export default function(state = initialState, action) {
         case ADD_STAFF:
             return {
                 ...state,
-                members: [action.payload, ...state.members]
+                members: [...state.members, action.payload]
             };
         
         case STAFF_LOADING:
