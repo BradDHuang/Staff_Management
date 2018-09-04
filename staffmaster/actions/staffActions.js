@@ -27,7 +27,7 @@ export const addStaff = (member) => dispatch => {
         );
 };
 
-export const deleteItem = (id) => dispatch => {
+export const deleteStaff = (id) => dispatch => {
     axios({
         method: "delete", 
         url: `https://personnel-management-happitt.c9users.io:8081/api/items/${id}`,
