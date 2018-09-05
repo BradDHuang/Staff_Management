@@ -4,7 +4,7 @@ import { Container, ListGroup, ListGroupItem} from "reactstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { connect } from "react-redux";
 import { getStaff } from "../actions/staffActions";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import InfiniteScroller from "react-infinite-scroller";
 // import * as actions from "../actions/staffActions";
 // import { ClipLoader } from "react-spinners";
@@ -40,7 +40,7 @@ import { getStaff } from "../actions/staffActions";
 class StaffList extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = { showDetail: false, toggle: false };
     }
     componentDidMount() {
         this.props.getStaff();
@@ -49,7 +49,7 @@ class StaffList extends Component {
     //     this.props.deleteStaff(id);
     // }
     onDetailClick = (id) => {
-        console.log(`you are going to staff detail with id: ${id}.`);
+        console.log(`you are going to open staff detail with id: ${id}.`);
     }
     render() {
         const { staff } = this.props.staff;
@@ -64,13 +64,17 @@ class StaffList extends Component {
                                 classNames="fade"
                             >
                                 <ListGroupItem>
-                                    {fullName}{" | "}
+                                    <Link to={`/api/staff/${_id}`}>
+                                        {fullName}{" | "}
+                                    </Link>
                                     {title}{" | "}
                                     {directReports.length}{" "}
-                                    <i onClick={() => this.onDetailClick(_id)} 
-                                        style={{color: "deepskyblue"}} 
-                                        className="fas fa-chevron-right">
-                                    </i>
+                                    <Link to={`/api/staff/${_id}`}>
+                                        <i onClick={() => this.onDetailClick(_id)} 
+                                            style={{color: "deepskyblue"}} 
+                                            className="fas fa-chevron-right">
+                                        </i>
+                                    </Link>
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}

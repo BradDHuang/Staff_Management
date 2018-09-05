@@ -7,18 +7,23 @@ import {Container} from "reactstrap";
 import StaffList from "./components/StaffList";
 import StaffModal from "./components/StaffModal";
 import AppNavbar from "./components/AppNavbar";
+import DetailPage from "./components/DetailPage";
+import { BrowserRouter, Route } from "react-router-dom";
 
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
-      <div>
-        <AppNavbar />
-        <Container>
-          <StaffModal />
-          <StaffList />
-        </Container>
-      </div>
+      <BrowserRouter>
+        <div>
+          <AppNavbar />
+          <Container>
+            <StaffModal />
+            <Route path="/" exact={true} component={StaffList} />
+            <Route path="/api/staff/:id" component={DetailPage} />
+          </Container>
+        </div>
+      </BrowserRouter>
       </Provider>
     );
   }
