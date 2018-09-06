@@ -73,6 +73,7 @@ app.get("/api/staff/:id", (req, res) => {
     });
 });
 
+/*
 app.put("/api/staff/:id", (req, res) => {
     let id = req.params.id;
     Staff.findById(id, (err, member) => {
@@ -97,6 +98,104 @@ app.put("/api/staff/:id", (req, res) => {
             });
         }
     });
+});
+*/
+// edit an existing member
+app.put("/api/staff/:id", (req, res) => {
+  Staff.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    (err, staff) => {
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        if (staff !== null) {
+          // https://stackoverflow.com/questions/32397419/model-findone-not-returning-docs-but-returning-a-wrapper-object
+          let obj = staff._doc; // .toObject()
+          // manager unchange
+          if (obj.manager === req.body.manager) {
+            Staff.findByIdAndUpdate(
+              req.params.id,
+              req.body,
+              (err, staff) => {
+                if (err) {
+                  res.status(500).json(err);
+                } else {
+                  Staff.find((err, staff) => {
+                    if (err) {
+                      res.status(500).json(err);
+                    } else {
+                      res.status(200).json({ staff });
+                    }
+                  });
+                }
+              }
+            );
+          } else {
+            // manager changed: A / null -> B / null
+            // delete prev manager (A)
+            if (staff.manager !== null) {
+              Staff.findById(obj.manager, (err, manager) => {
+                if (err) {
+                  res.status(500).json(err);
+                } else {
+                  if (manager !== null) {
+                    let newManager = Object.assign({}, manager._doc);
+                    newManager.directReports = newManager.directReports.filter(
+                      user => user !== req.params.id
+                    );
+                    Staff.findByIdAndUpdate(
+                      obj.manager,
+                      newManager,
+                      (err, manager) => {
+                        if (err) {
+                          res.status(500).json(err);
+                        }
+                      }
+                    );
+                  }
+                }
+              });
+            }
+
+            // update new manager's (B's) directReports
+            if (req.body.manager !== null) {
+              Staff.findById(req.body.manager, (err, manager) => {
+                if (err) {
+                  res.status(500).json(err);
+                } else {
+                  if (manager !== null) {
+                    let newManager = Object.assign({}, manager._doc);
+                    newManager.directReports = [
+                      ...newManager.directReports,
+                      obj._id
+                    ];
+                    Staff.findByIdAndUpdate(
+                      req.body.manager,
+                      newManager,
+                      (err, manager) => {
+                        if (err) {
+                          res.status(500).json(err);
+                        } else {
+                          Staff.find((err, staff) => {
+                            if (err) {
+                              res.status(500).json(err);
+                            } else {
+                              res.status(200).json({ staff });
+                            }
+                          });
+                        }
+                      }
+                    );
+                  }
+                }
+              });
+            }
+          }
+        }
+      }
+    }
+  );
 });
 
 app.delete("/api/staff/:id", (req, res) => {
