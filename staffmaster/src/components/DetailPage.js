@@ -24,6 +24,11 @@ class DetailPage extends Component {
         this.props.deleteStaff(detail._id);
         this.setState({ redirect: true });
     }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.match.params.id !== this.props.match.params.id) {
+            this.props.getStaffDetail(nextProps.match.params.id);
+        }
+    }
     render() {
         console.log(this.props.detail);
         return this.state.redirect ? (<Redirect to={{ pathname: "/" }} />) : 
@@ -34,7 +39,7 @@ class DetailPage extends Component {
                     <h4>Staff Detail:</h4>
                     
                     <Link to="/">
-                        <Button type="button" className="btn">Back</Button>
+                        <Button type="button" className="btn">Home</Button>
                     </Link>
                     {" "}
                     <Link to="/edit">
@@ -52,12 +57,12 @@ class DetailPage extends Component {
                 <Form>
                 <FormGroup>
                     <hr />
-                    <div className="li-name">{this.props.detail.detail.fullName}</div>
+                    <div style={{fontWeight: "bold"}} className="li-name">{this.props.detail.detail.fullName}</div>
                     <div className="li-title">{this.props.detail.detail.title}</div>
                     <hr />
                     <Link to={
                       this.props.detail.manager
-                        ? `/detail/${this.props.detail.detail.manager}`
+                        ? `/api/staff/${this.props.detail.detail.manager}`
                         : `${this.props.match.url}`
                       }
                       style={{color: "deepskyblue"}}
