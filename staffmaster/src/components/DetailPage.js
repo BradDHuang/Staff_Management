@@ -3,6 +3,11 @@ import React, {Component} from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { getStaffDetail, deleteStaff } from "../actions/staffActions";
+import {
+    Button,
+    Form, 
+    FormGroup
+} from "reactstrap";
 
 class DetailPage extends Component {
     constructor(props) {
@@ -26,86 +31,88 @@ class DetailPage extends Component {
         (
             <div>
                 <div>
-                    Staff
-                    <br />
+                    <h4>Staff Detail:</h4>
+                    
                     <Link to="/">
-                        <button type="button" className="btn">Back</button>
+                        <Button type="button" className="btn">Back</Button>
                     </Link>
                     {" "}
                     <Link to="/edit">
-                    <button type="button" className="btn btn-info">Edit</button>
+                        <Button type="button" className="btn btn-info">Edit</Button>
                     </Link>
                     {" "}
-                    <button
+                    <Button
                         type="button"
                         className="btn btn-danger"
                         onClick={this.onDeleteClick}
                     >
                         Delete
-                    </button>
+                    </Button>
                 </div>
-                <ul className="list-wrap list-detail">
-                    <li>
-                    
-                        <div className="li-name">{this.props.detail.detail.fullName}</div>
-                        <div className="li-title">{this.props.detail.detail.title}</div>
-                    </li>
+                <Form>
+                <FormGroup>
+                    <hr />
+                    <div className="li-name">{this.props.detail.detail.fullName}</div>
+                    <div className="li-title">{this.props.detail.detail.title}</div>
+                    <hr />
                     <Link to={
                       this.props.detail.manager
                         ? `/detail/${this.props.detail.detail.manager}`
-                        : `${this.props.url}`
-                    }>
-                        <li>
-                          <h4>View Manager</h4>
-                          <div>
-                            {this.props.detail.manager
-                              ? `${this.props.detail.manager.fullName}`
-                              : "None"}
-                          </div>
-                        </li>
+                        : `${this.props.match.url}`
+                      }
+                      style={{color: "deepskyblue"}}
+                    >
+                        {"View Manager"}
                     </Link>
+                    <div>
+                      {this.props.detail.manager
+                        ? `${this.props.detail.manager.fullName}`
+                        : "None"}
+                    </div>
+                    <hr />
                     <Link to={
                       this.props.detail.directReports.length > 0
                         ? "/report"
-                        : `${this.props.url}`
-                    }>
-                        <li>
-                          <h4>View Direct Reports</h4>
-                          <div>{this.props.detail.directReports.length}</div>
-                        </li>
+                        : `${this.props.match.url}`
+                      }
+                      style={{color: "deepskyblue"}}
+                    >
+                        {"View Direct Reports"}
                     </Link>
-                    <li>
-                        <h4>Call Office</h4>
-                        <div>
-                          {this.props.detail.detail.officePhone
-                            ? this.props.detail.detail.officePhone
-                            : "N/A"}
-                          <a href={`tel: ${this.props.detail.detail.officePhone}`}>
-                            <i className="fas fa-phone" />
-                          </a>
-                        </div>
-                    </li>
-                    <li>
-                        <h4>Call Cell</h4>
-                        <div>
-                          {this.props.detail.detail.cellPhone
-                            ? this.props.detail.detail.cellPhone
-                            : "N/A"}
-                          <a href={`tel: ${this.props.detail.detail.cellPhone}`}>
-                            <i className="fas fa-mobile"></i>
-                          </a>
-                        </div>
-                    </li>
-                    <li>
-                        <h4>Email</h4>
-                        <div>
-                          {this.props.detail.detail.email}{" "}
-                          <a href={`mail to: ${this.props.detail.detail.email}`}>
-                            <i className="far fa-envelope-open" />
-                          </a>
-                        </div>
-                    </li>
-                </ul>
+                    <div>{this.props.detail.directReports.length}</div>
+                    <hr />
+                    <div style={{color: "deepskyblue"}}>
+                        {"Call Office"}
+                    </div>
+                    <div>
+                        <i className="fas fa-phone" />
+                        {" "}{this.props.detail.detail.officePhone
+                          ? this.props.detail.detail.officePhone
+                          : "N/A"}
+                    </div>
+                    <hr />
+                    <div style={{color: "deepskyblue"}}>
+                        {"Call Cell"}
+                    </div>
+                    <div>
+                        <i className="fas fa-mobile"></i>
+                        {" "}{this.props.detail.detail.cellPhone
+                          ? this.props.detail.detail.cellPhone
+                          : "N/A"}
+                    </div>
+                    <hr />
+                    <div style={{color: "deepskyblue"}}>
+                        {"Email"}
+                    </div>
+                    <div>
+                        <i className="far fa-envelope-open" />
+                        {" "}{this.props.detail.detail.email
+                          ? this.props.detail.detail.email
+                          : "N/A"}
+                    </div>
+                    <hr />
+                </FormGroup>
+                </Form>
             </div>
         );
     }
