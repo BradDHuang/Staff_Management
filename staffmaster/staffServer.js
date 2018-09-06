@@ -49,7 +49,12 @@ app.get("/api/staff/:id", (req, res) => {
         if (err) {
             res.status(500).json(err);
         } else {
-            // console.log(staff._id);
+            // console.log(typeof(staff.id)); // string 
+            // The _id field is primary key for every document. 
+            // It's called _id and is also accessible via id.
+            // console.log(typeof(staff._id)); // object
+            // that is:
+            // console.log(staff.id === staff._id.toString()); // true
             let dr = staff.directReports;
             let manager = staff.manager;
             // console.log(manager);
@@ -59,8 +64,8 @@ app.get("/api/staff/:id", (req, res) => {
                 } else {
                     res.status(200).json({
                         staff,
-                        manager: members.filter(e => manager === e._id),
-                        directReports: members.filter(e => dr.includes(e._id)),
+                        manager: members.filter(e => manager === e._id.toString()),
+                        directReports: members.filter(e => dr.includes(e.id)),
                     }); 
                 }
             });
