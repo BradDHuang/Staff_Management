@@ -102,19 +102,19 @@ app.put("/api/staff/:id", (req, res) => {
 */
 // edit an existing member
 app.put("/api/staff/:id", (req, res) => {
-  Staff.findByIdAndUpdate(
+  Staff.findOneAndUpdate(
     req.params.id,
     req.body,
     (err, staff) => {
       if (err) {
         res.status(500).json(err);
       } else {
-        if (staff !== null) {
+        if (staff != null) {
           // https://stackoverflow.com/questions/32397419/model-findone-not-returning-docs-but-returning-a-wrapper-object
           let obj = staff._doc; // .toObject()
-          // manager unchange
+          // manager unchange: A -> A, or none -> none.
           if (obj.manager === req.body.manager) {
-            Staff.findByIdAndUpdate(
+            Staff.findOneAndUpdate(
               req.params.id,
               req.body,
               (err, staff) => {
@@ -142,10 +142,11 @@ app.put("/api/staff/:id", (req, res) => {
                   if (manager !== null) {
                     let newManager = Object.assign({}, manager._doc);
                     newManager.directReports = newManager.directReports.filter(
-                      user => user !== req.params.id
+                      m => m !== req.params.id
                     );
-                    Staff.findByIdAndUpdate(
+                    Staff.findOneAndUpdate(
                       obj.manager,
+                      
                       newManager,
                       (err, manager) => {
                         if (err) {
@@ -170,8 +171,9 @@ app.put("/api/staff/:id", (req, res) => {
                       ...newManager.directReports,
                       obj._id
                     ];
-                    Staff.findByIdAndUpdate(
+                    Staff.findOneAndUpdate(
                       req.body.manager,
+                      
                       newManager,
                       (err, manager) => {
                         if (err) {

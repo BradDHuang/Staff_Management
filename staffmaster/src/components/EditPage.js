@@ -15,7 +15,7 @@ class EditPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    //   _id: "",
+      _id: "",
       fullName: "",
       title: "",
       sex: "",
@@ -30,7 +30,7 @@ class EditPage extends Component {
   componentDidMount() {
     console.log(this.props.detail.detail);
     this.setState({
-    //   _id: this.props.detail.detail._id,
+      _id: this.props.detail.detail._id,
       fullName: this.props.detail.detail.fullName,
       title: this.props.detail.detail.title,
       sex: this.props.detail.detail.sex,
@@ -50,13 +50,16 @@ class EditPage extends Component {
   onSubmit = e => {
     e.preventDefault();
     let member = {
-      manager: this.state.manager,
+      _id: this.state._id,
+      fullName: this.state.fullName,
       title: this.state.title,
       sex: this.state.sex,
+      email: this.state.email,
       officePhone: this.state.officePhone,
       cellPhone: this.state.cellPhone,
-      email: this.state.email
+      manager: this.state.manager,
     };
+    console.log(this.state._id, member);
     this.props.dispatch(actions.editStaff(this.state._id, member));
     this.setState({redirect: true});
   };
