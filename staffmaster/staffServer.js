@@ -45,11 +45,25 @@ app.post("/api/staff", (req, res) => {
 });
 
 app.get("/api/staff/:id", (req, res) => {
-    Staff.findById(req.params.id, (err, member) => {
+    Staff.findById(req.params.id, (err, staff) => {
         if (err) {
             res.status(500).json(err);
         } else {
-            res.status(200).json(member);
+            // console.log(staff._id);
+            let dr = staff.directReports;
+            let manager = staff.manager;
+            // console.log(manager);
+            Staff.find((err, members) => {
+                if (err) {
+                    res.status(500).json(err);
+                } else {
+                    res.status(200).json({
+                        staff,
+                        manager: members.filter(e => manager === e._id),
+                        directReports: members.filter(e => dr.includes(e._id)),
+                    }); 
+                }
+            });
         }
     });
 });

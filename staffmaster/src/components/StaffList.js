@@ -40,16 +40,13 @@ import { Link } from "react-router-dom";
 class StaffList extends Component {
     constructor(props) {
         super(props);
-        this.state = { showDetail: false, toggle: false };
+        this.state = {};
     }
     componentDidMount() {
         this.props.getStaff();
     }
-    // onDeleteClick = (id) => {
-    //     this.props.deleteStaff(id);
-    // }
     onDetailClick = (id) => {
-        console.log(`you are going to open staff detail with id: ${id}.`);
+        console.log(`you opened staff detail page with id: ${id}.`);
     }
     render() {
         const { staff } = this.props.staff;
