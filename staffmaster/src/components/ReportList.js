@@ -12,15 +12,18 @@ const List = props => {
     <Form>
     <FormGroup>
       <div>
+        <hr />
         <Link to={`/api/staff/${props.data._id}`}>
-          <div>{props.data.fullName}</div>
+          {props.data.fullName}
         </Link>
-        <div>{props.data.title}</div>
+        {" | "}{props.data.title}{" | "}
+        
+        <Link to={`/api/staff/${props.data._id}`}>
+          {props.data.directReports.length}{" "}
+            <i className="fas fa-angle-right" />
+          
+        </Link>
       </div>
-      <Link to={`/api/staff/${props.data._id}`}>
-        <div>{props.data.directReports.length}</div>
-        <i className="fas fa-angle-right" />
-      </Link>
     </FormGroup>
     </Form>
   );
@@ -31,10 +34,12 @@ class ReportList extends Component {
   render() {
     return (
       <div>
+        <h3>
         <Link to={`/api/staff/${this.props.detail.detail._id}`}>
           <i className="fas fa-angle-left" />
         </Link>
-        {"Direct Report"}
+        {" "}{"Direct Report"}
+        </h3>
         <div>
             {this.props.detail.directReports.map((dr, index) => {
               return <List data={dr} key={index} />;

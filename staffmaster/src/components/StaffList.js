@@ -62,11 +62,12 @@ class StaffList extends Component {
                             >
                                 <ListGroupItem>
                                     <Link to={`/api/staff/${_id}`}>
-                                        {fullName}{" | "}
+                                        {fullName}
                                     </Link>
-                                    {title}{" | "}
-                                    {directReports.length}{" "}
+                                    {" | "}{title}{" | "}
+                                    
                                     <Link to={`/api/staff/${_id}`}>
+                                        {directReports.length}{" "}
                                         <i onClick={() => this.onDetailClick(_id)} 
                                             style={{color: "deepskyblue"}} 
                                             className="fas fa-chevron-right">
