@@ -29,6 +29,8 @@ app.get("/api/staff", (req, res) => {
 app.post("/api/staff", (req, res) => {
     console.log("Created a new member.");
     console.log(req.body);
+    console.log(req.body.manager);
+    if (!req.body.manager) {
     Staff.create(req.body, (err, staff) => {
       if (err) {
         res.status(500).json(err);
@@ -42,6 +44,42 @@ app.post("/api/staff", (req, res) => {
         });
       }
     });
+    } else {
+      // update the manager's d.r.s
+      Staff.create(req.body, (err, staff) => {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+          Staff.findById(req.body.manager, (err, manager) => {
+            if (err) {
+              res.status(500).json(err);
+            } else {
+              manager.directReports = [
+                ...manager.directReports,
+                staff._id
+              ];
+              console.log(manager.directReports);
+              manager.save(err => {
+                if (err) {
+                  res.status(500).json(err);
+                } else {
+                  console.log("updated the manager's d.r.s");
+                  Staff.find((err, staff) => {
+                    if (err) {
+                      res.status(500).json(err);
+                    } else {
+                      res.status(200).json({ staff });
+                    }
+                  });
+                }
+                
+              });
+            }
+            
+          });
+        }
+      });
+    }
 });
 
 app.get("/api/staff/:id", (req, res) => {
