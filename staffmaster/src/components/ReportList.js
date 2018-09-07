@@ -36,8 +36,8 @@ class ReportList extends Component {
         </Link>
         {"Direct Report"}
         <div>
-            {this.props.detail.directReports.map(dr => {
-              return <List data={dr} key={dr.id} />;
+            {this.props.detail.directReports.map((dr, index) => {
+              return <List data={dr} key={index} />;
             })}
         </div>
       </div>

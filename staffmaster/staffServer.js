@@ -112,10 +112,51 @@ app.put("/api/staff/:id", (req, res) => {
       if (err) {
         res.status(500).json(err);
       } else {
+        
+        if (staff != null) {
+          
         //   console.log(req.body);
         //   console.log(staff);
           
-        if (staff != null) {
+        // Staff.findById(
+          // req.params.id,
+        //   req.body,
+          // (err, staff) => {
+              // console.log(staff);
+            // if (err) {
+              // res.status(500).json(err);
+            // } else {
+              
+              staff.fullName = req.body.fullName;
+              staff.title = req.body.title;
+              staff.sex = req.body.sex;
+              staff.officePhone = req.body.officePhone;
+              staff.cellPhone = req.body.cellPhone;
+              staff.email = req.body.email;
+              staff.manager = req.body.manager;
+              // console.log(staff);
+              staff.save(err => {
+                  if (err) {
+                    res.status(500).json(err);
+                  } else {
+                    
+                    Staff.findById(req.params.id, (err, staff) => {
+                        if (err) {
+                          res.status(500).json(err);
+                        } else {
+                          console.log("edited a staff member's info.");
+                          console.log(staff);
+                          
+                        }
+                    });
+                  }
+              });
+              
+            
+          // }
+        // );
+          
+        
           // https://stackoverflow.com/questions/32397419/model-findone-not-returning-docs-but-returning-a-wrapper-object
           let obj = staff._doc; // .toObject()
           // console.log(typeof(staff)); // object
@@ -133,24 +174,25 @@ app.put("/api/staff/:id", (req, res) => {
                   res.status(500).json(err);
                 } else {
                   
-                  staff.fullName = req.body.fullName;
-                  staff.title = req.body.title;
-                  staff.sex = req.body.sex;
-                  staff.officePhone = req.body.officePhone;
-                  staff.cellPhone = req.body.cellPhone;
-                  staff.email = req.body.email;
+                  // staff.fullName = req.body.fullName;
+                  // staff.title = req.body.title;
+                  // staff.sex = req.body.sex;
+                  // staff.officePhone = req.body.officePhone;
+                  // staff.cellPhone = req.body.cellPhone;
+                  // staff.email = req.body.email;
+                  // // staff.manager = req.body.manager;
                   // console.log(staff);
-                  staff.save(err => {
-                      if (err) {
-                        res.status(500).json(err);
-                      } else {
+                  // staff.save(err => {
+                      // if (err) {
+                      //   res.status(500).json(err);
+                      // } else {
                         
-                        Staff.findById(req.params.id, (err, staff) => {
-                            if (err) {
-                              res.status(500).json(err);
-                            } else {
-                              console.log("edited a staff member's info.");
-                              console.log(staff);
+                        // Staff.findById(req.params.id, (err, staff) => {
+                            // if (err) {
+                            //   res.status(500).json(err);
+                            // } else {
+                              // console.log("edited a staff member's info.");
+                              // console.log(staff);
                               Staff.find((err, staff) => {
                                 if (err) {
                                   res.status(500).json(err);
@@ -158,10 +200,10 @@ app.put("/api/staff/:id", (req, res) => {
                                   res.status(200).json({ staff });
                                 }
                               });
-                            }
-                        });
-                      }
-                  });
+                            // }
+                        // });
+                      // }
+                  // });
                 }
               }
             );
@@ -175,14 +217,15 @@ app.put("/api/staff/:id", (req, res) => {
                 if (err) {
                   res.status(500).json(err);
                 } else {
-                  console.log(manager);
+                  
                   if (manager !== null) {
+                    console.log(manager.directReports);
                     // let newManager = Object.assign({}, manager._doc);
                     // newManager.directReports = newManager.directReports.filter(
                     manager.directReports = manager.directReports.filter(
                       m => m !== req.params.id
                     );
-                    console.log(manager);
+                    console.log(manager.directReports);
                     // console.log(obj.manager);
                     // Staff.findOneAndUpdate(
                     // Staff.findById(
@@ -225,7 +268,7 @@ app.put("/api/staff/:id", (req, res) => {
                 if (err) {
                   res.status(500).json(err);
                 } else {
-                  console.log(manager);
+                  // console.log(manager);
                   console.log(obj._id);
                   if (manager !== null) {
                     // let newManager = Object.assign({}, manager._doc);
