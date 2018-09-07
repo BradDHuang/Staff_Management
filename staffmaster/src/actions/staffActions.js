@@ -87,7 +87,8 @@ export const getStaffDetail = (id) => dispatch => {
 
 export const editStaff = (id, member) => dispatch => {
     axios
-      .put(`https://personnel-management-happitt.c9users.io:8081/api/staff/${id}`, member)
+    //   .put(`https://personnel-management-happitt.c9users.io:8081/api/staff/${id}`, member)
+      .put(`https://personnel-management-happitt.c9users.io:8081/api/staff/${id}`, qs.stringify(member))
       .then(res => {
           dispatch(getStaffSuccess(res.data.staff));
       })
