@@ -364,11 +364,212 @@ app.put("/api/staff/:id", (req, res) => {
 });
 
 app.delete("/api/staff/:id", (req, res) => {
-    Staff.findById(req.params.id)
-        .then(member => member
-            .remove()
-            .then(() => res.status(200).json({ success: true })))
-        .catch(err => res.status(500).json(err));
+    // Staff.findById(req.params.id)
+    //     .then(member => member
+    //         .remove()
+    //         .then(() => res.status(200).json({ success: true })))
+    //     .catch(err => res.status(500).json(err));
+    Staff.findById(req.params.id, (err, staff) => {
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        if (staff !== null) {
+          let obj = staff._doc;
+          console.log(obj);
+          
+          // the staff has a manager?
+          // if yes, and the staff is to be deleted, then the manager's info should be updated.
+          if (obj.manager !== null) {
+            Staff.findById(obj.manager, (err, manager) => {
+              if (err) {
+                res.status(500).json(err);
+              } else {
+                if (manager !== null) {
+                  let index = manager.directReports
+                    .indexOf(req.params.id);
+                  manager.directReports = [
+                    ...manager.directReports.slice(0, index),
+                    ...manager.directReports.slice(index + 1, manager.directReports.length)
+                  ];
+                  manager.save(
+                    err => {
+                      if (err) {
+                        res.status(500).json(err);
+                      } else {
+                        Staff.findById(obj.manager, (err, m) => {
+                            if (err) {
+                              res.status(500).json(err);
+                            } else {
+                              console.log("after deleting, updated obj's manager's d.r.s info.");
+                              console.log(m);
+                              
+                            }
+                        });
+                      }
+                    }
+                  );
+                  Staff.findById(obj.manager, (err, manager) => {
+                    if (err) {
+                      res.status(500).json(err);
+                    } else {
+                      // if the staff has directReports.
+                      if (obj.directReports.length > 0) {
+                        obj.directReports.forEach(dr => {
+                          console.log(dr);
+                          Staff.findById(dr, (err, staff) => {
+                            if (err) {
+                              res.status(500).json(err);
+                            } else {
+                              if (staff !== null) {
+                                // change the staff's d.r.s's manager
+                                staff.manager = obj.manager;
+                                staff.save(
+                                  err => {
+                                    if (err) {
+                                      res.status(500).json(err);
+                                    } else {
+                                      Staff.findById(dr, (err, staff) => {
+                                          if (err) {
+                                            res.status(500).json(err);
+                                          } else {
+                                            console.log("change the staff's d.r.s's manager");
+                                            console.log(staff.manager);
+                                            
+                                          }
+                                      });
+                                    }
+                                  }  
+                                );
+                                Staff.findById(dr, (err, staff) => {
+                                  if (err) {
+                                    res.status(500).json(err);
+                                  } 
+                                  
+                                });
+                              }
+                            }
+                          });
+                        });
+                        Staff.findById(obj.manager, (err, manager) => {
+                          if (err) {
+                            res.status(500).json(err);
+                          } else {
+                            if (manager !== null) {
+                              // update the obj's manager's d.r.s
+                              manager.directReports = [
+                                ...manager.directReports,
+                                ...obj.directReports
+                              ];
+                              manager.save(
+                                err => {
+                                  if (err) {
+                                    res.status(500).json(err);
+                                  } else {
+                                    Staff.findById(obj.manager, (err, m) => {
+                                        if (err) {
+                                          res.status(500).json(err);
+                                        } else {
+                                          console.log("update the obj's manager's d.r.s");
+                                          console.log(m.directReports);
+                                          
+                                        }
+                                    });
+                                  }
+                                } 
+                              );
+                              Staff.findById(obj.manager, (err, manager) => {
+                                if (err) {
+                                  res.status(500).json(err);
+                                } else {
+                                  // Staff.remove(
+                                  Staff.deleteOne(
+                                    {_id: req.params.id}, err => {
+                                      if (err) {
+                                        res.status(500).json(err);
+                                      } else {
+                                        console.log("Deleted a staff.");
+                                        Staff.find((err, staff) => {
+                                          if (err) {
+                                            res.status(500).json(err);
+                                          } else {
+                                            res.status(200).json({ staff });
+                                          }
+                                        });
+                                      }
+                                    }
+                                  );
+                                }
+                              });
+                            } else {
+                              // Staff.remove(
+                              Staff.deleteOne(
+                                {_id: req.params.id}, err => {
+                                  if (err) {
+                                    res.status(500).json(err);
+                                  } else {
+                                    console.log("Deleted a staff.");
+                                    Staff.find((err, staff) => {
+                                      if (err) {
+                                        res.status(500).json(err);
+                                      } else {
+                                        res.status(200).json({ staff });
+                                      }
+                                    });
+                                  }
+                                }
+                              );
+                            }
+                          }
+                        });
+                      } else {
+                        // Staff.remove(
+                        Staff.deleteOne(
+                          {_id: req.params.id}, err => {
+                            if (err) {
+                              res.status(500).json(err);
+                            } else {
+                              console.log("Deleted a staff.");
+                              Staff.find((err, staff) => {
+                                if (err) {
+                                  res.status(500).json(err);
+                                } else {
+                                  res.status(200).json({ staff });
+                                }
+                              });
+                            }
+                          }
+                        );
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          } else {
+            Staff.remove(
+              {_id: req.params.id}, err => {
+                if (err) {
+                  res.status(500).json(err);
+                } else {
+                  console.log("Deleted a staff.");
+                  Staff.find((err, staff) => {
+                    if (err) {
+                      res.status(500).json(err);
+                    } else {
+                      res.status(200).json({ staff });
+                    }
+                  });
+                }
+              }
+            );
+            
+          }
+        } 
+        // else {
+          
+        // }
+      }
+    });
 });
 
 app.listen(port, () => {

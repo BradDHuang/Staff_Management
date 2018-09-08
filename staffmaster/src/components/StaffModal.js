@@ -60,7 +60,7 @@ class StaffModal extends Component {
         }
     }
     render() {
-        const { staff } = this.props.staff;
+        // const { staff } = this.props.staff;
         return (
             <div>
                 <Button
@@ -161,7 +161,7 @@ class StaffModal extends Component {
                                 >
                                     <option value={null}>None</option>
                                     {
-                                        staff.map((manager, index) => {
+                                        this.props.staff.staff.map((manager, index) => {
                                             return <option key={index} value={manager._id}>{manager.fullName}</option>;
                                         })
                                     }
