@@ -1,7 +1,7 @@
 
 import React, {Component} from "react";
-import { Container, ListGroup, ListGroupItem} from "reactstrap";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { Container, ListGroup, ListGroupItem, Input, Label,} from "reactstrap";
+// import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { connect } from "react-redux";
 import { getStaff } from "../actions/staffActions";
 import { Link } from "react-router-dom";
@@ -17,30 +17,41 @@ import { Link } from "react-router-dom";
 //   );
 // };
 
-// const List = props => {
-//   return (
-//     <li className="list">
-      
-//       <div className="li-mid">
-//         <Link to={`/detail/${props.data._id}`}>
-//           <div className="li-name">
-//             {props.data.fullName}
-//           </div>
-//         </Link>
-//         <div className="li-title">{props.data.title}</div>
-//       </div>
-//       <div className="li-reports">{props.data.directReports.length}</div>
-//       <Link to={`/detail/${props.data._id}`}>
-//         <i className="fas fa-angle-right" id="li-arrow" />
-//       </Link>
-//     </li>
-//   );
-// };
+const List = props => {
+    return (
+        <ListGroupItem style={{ display: "flex", width: "400px" }}>
+            <div style={{ flex: "50%" }}>
+                <Link to={`/api/staff/${props.data._id}`}
+                    style={{fontWeight: "bold", color: "deepskyblue"}}
+                >
+                    {props.data.fullName}
+                </Link>
+                <div>
+                {props.data.title}
+                </div>
+            </div>
+            <div style={{ fontSize: "200%" }}>
+                <Link to={`/api/staff/${props.data._id}`}
+                    style={{ color: "deepskyblue" }}
+                >
+                    <span style={{ fontSize: "75%" }}>
+                        {props.data.directReports.length}{" "}
+                    </span>
+                    <span>
+                    <i onClick={() => props.onDetailClick(props.data._id)} 
+                        className="fas fa-chevron-right">
+                    </i>
+                    </span>
+                </Link>
+            </div>
+        </ListGroupItem>
+    );
+};
 
 class StaffList extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = { search: "" };
     }
     componentDidMount() {
         this.props.getStaff();
@@ -48,47 +59,46 @@ class StaffList extends Component {
     onDetailClick = (id) => {
         console.log(`you opened staff detail page with id: ${id}.`);
     }
+    handleSearch = (e) => {
+        this.setState({ search: e.target.value });
+    }
+    matchSearch = (m) => {
+        return (
+            m.fullName.search(new RegExp(this.state.search)) !== -1 ||
+            m.title.search(new RegExp(this.state.search)) !== -1 
+            // m.sex.search(new RegExp(this.state.search)) !== -1 ||
+            // m.email.search(new RegExp(this.state.search)) !== -1
+        );
+    }
     render() {
         const { staff } = this.props.staff;
         return (
             <Container>
                 <h1>Staff Directory</h1>
+                <hr />
+                    <div style={{ width: "400px" }}>
+                        <Label for="search">Search:</Label>
+                        <Input type="text" value={this.state.search} 
+                            onChange={this.handleSearch}
+                            id="search"
+                        />
+                    </div>
+                <hr />
                 <ListGroup>
-                    <TransitionGroup>
-                        {staff.map(({ _id, fullName, title, directReports }) => (
-                            <CSSTransition key={_id}
-                                timeout={500}
-                                classNames="fade"
-                            >
-                                <ListGroupItem style={{ display: "flex", width: "400px" }}>
-                                    <div style={{ flex: "50%" }}>
-                                        <Link to={`/api/staff/${_id}`}
-                                            style={{fontWeight: "bold", color: "deepskyblue"}}
-                                        >
-                                            {fullName}
-                                        </Link>
-                                        <div>
-                                        {title}
-                                        </div>
-                                    </div>
-                                    <div style={{ fontSize: "200%" }}>
-                                        <Link to={`/api/staff/${_id}`}
-                                            style={{ color: "deepskyblue" }}
-                                        >
-                                            <span style={{ fontSize: "75%" }}>
-                                                {directReports.length}{" "}
-                                            </span>
-                                            <span>
-                                            <i onClick={() => this.onDetailClick(_id)} 
-                                                className="fas fa-chevron-right">
-                                            </i>
-                                            </span>
-                                        </Link>
-                                    </div>
-                                </ListGroupItem>
-                            </CSSTransition>
-                        ))}
-                    </TransitionGroup>
+                        {staff.map((member, index) => {
+                            
+                            if (this.state.search === "") {
+                                return <List key={index} data={member} 
+                                        onDetailClick={this.onDetailClick}
+                                       />;
+                            } else {
+                                return (this.matchSearch(member)) ?
+                                    <List key={index} data={member} 
+                                        onDetailClick={this.onDetailClick}
+                                    />
+                                    : null;
+                            }
+                        })}
                 </ListGroup>
             </Container>
         );
