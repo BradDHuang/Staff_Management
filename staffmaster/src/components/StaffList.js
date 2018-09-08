@@ -54,25 +54,37 @@ class StaffList extends Component {
             <Container>
                 <h1>Staff Directory</h1>
                 <ListGroup>
-                    <TransitionGroup className="shopping-list">
+                    <TransitionGroup>
                         {staff.map(({ _id, fullName, title, directReports }) => (
                             <CSSTransition key={_id}
                                 timeout={500}
                                 classNames="fade"
                             >
-                                <ListGroupItem>
-                                    <Link to={`/api/staff/${_id}`}>
-                                        {fullName}
-                                    </Link>
-                                    {" | "}{title}{" | "}
-                                    
-                                    <Link to={`/api/staff/${_id}`}>
-                                        {directReports.length}{" "}
-                                        <i onClick={() => this.onDetailClick(_id)} 
-                                            style={{color: "deepskyblue"}} 
-                                            className="fas fa-chevron-right">
-                                        </i>
-                                    </Link>
+                                <ListGroupItem style={{ display: "flex", width: "400px" }}>
+                                    <div style={{ flex: "50%" }}>
+                                        <Link to={`/api/staff/${_id}`}
+                                            style={{fontWeight: "bold", color: "deepskyblue"}}
+                                        >
+                                            {fullName}
+                                        </Link>
+                                        <div>
+                                        {title}
+                                        </div>
+                                    </div>
+                                    <div style={{ fontSize: "200%" }}>
+                                        <Link to={`/api/staff/${_id}`}
+                                            style={{ color: "deepskyblue" }}
+                                        >
+                                            <span style={{ fontSize: "75%" }}>
+                                                {directReports.length}{" "}
+                                            </span>
+                                            <span>
+                                            <i onClick={() => this.onDetailClick(_id)} 
+                                                className="fas fa-chevron-right">
+                                            </i>
+                                            </span>
+                                        </Link>
+                                    </div>
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}
