@@ -193,30 +193,7 @@ app.put("/api/staff/:id", (req, res) => {
               // res.status(500).json(err);
             // } else {
               
-              staff.fullName = req.body.fullName;
-              staff.title = req.body.title;
-              staff.sex = req.body.sex;
-              staff.officePhone = req.body.officePhone;
-              staff.cellPhone = req.body.cellPhone;
-              staff.email = req.body.email;
-              staff.manager = req.body.manager;
-              // console.log(staff);
-              staff.save(err => {
-                  if (err) {
-                    res.status(500).json(err);
-                  } else {
-                    
-                    Staff.findById(req.params.id, (err, staff) => {
-                        if (err) {
-                          res.status(500).json(err);
-                        } else {
-                          console.log("edited a staff member's info.");
-                          console.log(staff);
-                          
-                        }
-                    });
-                  }
-              });
+              
               
             
           // }
@@ -259,13 +236,43 @@ app.put("/api/staff/:id", (req, res) => {
                             // } else {
                               // console.log("edited a staff member's info.");
                               // console.log(staff);
-                              Staff.find((err, staff) => {
-                                if (err) {
-                                  res.status(500).json(err);
-                                } else {
-                                  res.status(200).json({ staff });
-                                }
-                              });
+              staff.fullName = req.body.fullName;
+              staff.title = req.body.title;
+              staff.sex = req.body.sex;
+              staff.officePhone = req.body.officePhone;
+              staff.cellPhone = req.body.cellPhone;
+              staff.email = req.body.email;
+              staff.manager = req.body.manager;
+              // console.log(staff);
+              staff.save(err => {
+                  if (err) {
+                    res.status(500).json(err);
+                  } else {
+                    
+                    Staff.findById(req.params.id, (err, staff) => {
+                        if (err) {
+                          res.status(500).json(err);
+                        } else {
+                          console.log("edited a staff member's info.");
+                          console.log(staff);
+                          Staff.find((err, staff) => {
+                            if (err) {
+                              res.status(500).json(err);
+                            } else {
+                              res.status(200).json({ staff });
+                            }
+                          });
+                        }
+                    });
+                  }
+              });
+                              // Staff.find((err, staff) => {
+                              //   if (err) {
+                              //     res.status(500).json(err);
+                              //   } else {
+                              //     res.status(200).json({ staff });
+                              //   }
+                              // });
                             // }
                         // });
                       // }

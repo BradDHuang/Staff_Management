@@ -51,7 +51,7 @@ const List = props => {
 class StaffList extends Component {
     constructor(props) {
         super(props);
-        this.state = { search: "" };
+        this.state = { search: "", descFullName: false };
     }
     componentDidMount() {
         this.props.getStaff();
@@ -70,11 +70,26 @@ class StaffList extends Component {
             // m.email.search(new RegExp(this.state.search)) !== -1
         );
     }
+    sortWithFullName = () => {
+        if (!this.state.descFullName) {
+            this.props.staff.staff.sort((a, b) => a.fullName.localeCompare(b.fullName));
+        } else {
+            this.props.staff.staff.sort((a, b) => b.fullName.localeCompare(a.fullName));
+        }
+        
+        this.setState({ descFullName: !this.state.descFullName });
+    }
     render() {
         const { staff } = this.props.staff;
         return (
             <Container>
-                <h1>Staff Directory</h1>
+                <div onClick={this.sortWithFullName}>
+                    <h1>{"Staff Directory "}
+                        <i style={{ color: "deepskyblue" }} 
+                            className="fas fa-sort">
+                        </i>
+                    </h1>
+                </div>
                 <hr />
                     <div style={{ width: "400px" }}>
                         <Input type="text" value={this.state.search} 
