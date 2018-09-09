@@ -11,6 +11,27 @@ import {
     Input
 } from "reactstrap";
 
+const findInvalidManagers = (members, memberID) => {
+  let map = new Map();
+  members.forEach(member => {
+    map.set(member._id, member);
+  });
+  let invalids = [];
+  lookUp(memberID, invalids, map);
+  return invalids;
+};
+const lookUp = (memberID, invalids, map) => {
+  if (!map.has(memberID)) {
+    return;
+  }
+  invalids.push(memberID);
+  let member = map.get(memberID);
+  for (let dr of member.directReports) {
+    lookUp(dr, invalids, map);
+  }
+  return;
+};
+
 class EditPage extends Component {
   constructor(props) {
     super(props);
@@ -20,10 +41,11 @@ class EditPage extends Component {
       title: "",
       sex: "",
       email: "",
-      officePhone: "",
-      cellPhone: "",
-      manager: "",
+      officePhone: null,
+      cellPhone: null,
+      manager: null,
       redirect: false,
+      invalid: [],
     };
   }
 
@@ -40,7 +62,9 @@ class EditPage extends Component {
       manager: this.props.detail.detail.manager
     });
     this.props.dispatch(actions.getStaff());
-    
+    this.setState({
+      invalid: findInvalidManagers(this.props.staff.staff, this.props.detail.detail._id)
+    });
   }
 
   onChange = (e) => {
@@ -145,13 +169,19 @@ class EditPage extends Component {
               <option value="">none</option>
               {this.props.staff.staff ? this.props.staff.staff.map((manager, index) => {
                 if (manager._id !== this.props.detail.detail._id) {
-                  
+                  if (this.state.invalid.includes(manager._id)) {
+                    return (
+                      <option key={index} value={manager._id} disabled>
+                        {manager.fullName}
+                      </option>
+                    );
+                  } else {
                     return (
                       <option key={index} value={manager._id}>
                         {manager.fullName}
                       </option>
                     );
-                  
+                  }
                 } else {
                     return (
                       <option key={index} value={manager._id} disabled>

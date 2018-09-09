@@ -283,7 +283,7 @@ app.put("/api/staff/:id", (req, res) => {
           } else {
             // manager changed: A / null -> B / null
             // delete prev manager (A)
-            // console.log(staff.manager);
+            console.log(staff.manager);
             if (staff.manager !== null) {
               // console.log(obj.manager);
               Staff.findById(obj.manager, (err, manager) => {
@@ -293,12 +293,12 @@ app.put("/api/staff/:id", (req, res) => {
                   
                   if (manager !== null) {
                     console.log(manager.directReports);
-                    // let newManager = Object.assign({}, manager._doc);
-                    // newManager.directReports = newManager.directReports.filter(
-                    manager.directReports = manager.directReports.filter(
+                    let newManager = Object.assign({}, manager._doc);
+                    newManager.directReports = newManager.directReports.filter(
+                    // manager.directReports = manager.directReports.filter(
                       m => m !== req.params.id
                     );
-                    console.log(manager.directReports);
+                    console.log(newManager.directReports);
                     // console.log(obj.manager);
                     // Staff.findOneAndUpdate(
                     // Staff.findById(
@@ -309,17 +309,18 @@ app.put("/api/staff/:id", (req, res) => {
                         // if (err) {
                           // res.status(500).json(err);
                         // } else {
-                          manager.save(
+                          // manager.save(
+                          newManager.save(
                             err => {
                               if (err) {
                                 res.status(500).json(err);
                               } else {
-                                Staff.findById(obj.manager, (err, staff) => {
+                                Staff.findById(obj.manager, (err, m) => {
                                     if (err) {
                                       res.status(500).json(err);
                                     } else {
                                       console.log("updated manager info.");
-                                      console.log(staff);
+                                      console.log(m.fullName);
                                       
                                     }
                                 });
@@ -344,9 +345,9 @@ app.put("/api/staff/:id", (req, res) => {
                   // console.log(manager);
                   console.log(obj._id);
                   if (manager !== null) {
-                    // let newManager = Object.assign({}, manager._doc);
-                    manager.directReports = [
-                      ...manager.directReports,
+                    let newManager = Object.assign({}, manager._doc);
+                    newManager.directReports = [
+                      ...newManager.directReports,
                       obj._id
                     ];
                     // Staff.findOneAndUpdate(
@@ -359,7 +360,7 @@ app.put("/api/staff/:id", (req, res) => {
                           // res.status(500).json(err);
                         // } else {
                           
-                          manager.save(
+                          newManager.save(
                             err => {
                               if (err) {
                                 res.status(500).json(err);
@@ -369,7 +370,7 @@ app.put("/api/staff/:id", (req, res) => {
                                       res.status(500).json(err);
                                     } else {
                                       console.log("updated new manager's d.r. info.");
-                                      console.log(staff);
+                                      console.log(staff.fullName);
                                       
                                       Staff.find((err, staff) => {
                                         if (err) {

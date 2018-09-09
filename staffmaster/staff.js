@@ -3,10 +3,10 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var StaffSchema = new Schema({
-    image: {
-        data: Buffer,
-        contentType: String
-    },
+    // image: {
+    //     data: Buffer,
+    //     contentType: String
+    // },
     fullName: {
         type: String,
         required: true,
