@@ -183,22 +183,6 @@ app.put("/api/staff/:id", (req, res) => {
           
         //   console.log(req.body);
         //   console.log(staff);
-          
-        // Staff.findById(
-          // req.params.id,
-        //   req.body,
-          // (err, staff) => {
-              // console.log(staff);
-            // if (err) {
-              // res.status(500).json(err);
-            // } else {
-              
-              
-              
-            
-          // }
-        // );
-          
         
           // https://stackoverflow.com/questions/32397419/model-findone-not-returning-docs-but-returning-a-wrapper-object
           let obj = staff._doc; // .toObject()
@@ -216,67 +200,38 @@ app.put("/api/staff/:id", (req, res) => {
                 if (err) {
                   res.status(500).json(err);
                 } else {
-                  
-                  // staff.fullName = req.body.fullName;
-                  // staff.title = req.body.title;
-                  // staff.sex = req.body.sex;
-                  // staff.officePhone = req.body.officePhone;
-                  // staff.cellPhone = req.body.cellPhone;
-                  // staff.email = req.body.email;
-                  // // staff.manager = req.body.manager;
+                
+                  staff.fullName = req.body.fullName;
+                  staff.title = req.body.title;
+                  staff.sex = req.body.sex;
+                  staff.officePhone = req.body.officePhone;
+                  staff.cellPhone = req.body.cellPhone;
+                  staff.email = req.body.email;
+                  staff.manager = req.body.manager;
                   // console.log(staff);
-                  // staff.save(err => {
-                      // if (err) {
-                      //   res.status(500).json(err);
-                      // } else {
+                  staff.save(err => {
+                      if (err) {
+                        res.status(500).json(err);
+                      } else {
                         
-                        // Staff.findById(req.params.id, (err, staff) => {
-                            // if (err) {
-                            //   res.status(500).json(err);
-                            // } else {
-                              // console.log("edited a staff member's info.");
-                              // console.log(staff);
-              staff.fullName = req.body.fullName;
-              staff.title = req.body.title;
-              staff.sex = req.body.sex;
-              staff.officePhone = req.body.officePhone;
-              staff.cellPhone = req.body.cellPhone;
-              staff.email = req.body.email;
-              staff.manager = req.body.manager;
-              // console.log(staff);
-              staff.save(err => {
-                  if (err) {
-                    res.status(500).json(err);
-                  } else {
-                    
-                    Staff.findById(req.params.id, (err, staff) => {
-                        if (err) {
-                          res.status(500).json(err);
-                        } else {
-                          console.log("edited a staff member's info.");
-                          console.log(staff);
-                          Staff.find((err, staff) => {
+                        Staff.findById(req.params.id, (err, staff) => {
                             if (err) {
                               res.status(500).json(err);
                             } else {
-                              res.status(200).json({ staff });
+                              console.log("edited a staff member's info.");
+                              console.log(staff);
+                              Staff.find((err, staff) => {
+                                if (err) {
+                                  res.status(500).json(err);
+                                } else {
+                                  res.status(200).json({ staff });
+                                }
+                              });
                             }
-                          });
-                        }
-                    });
-                  }
-              });
-                              // Staff.find((err, staff) => {
-                              //   if (err) {
-                              //     res.status(500).json(err);
-                              //   } else {
-                              //     res.status(200).json({ staff });
-                              //   }
-                              // });
-                            // }
-                        // });
-                      // }
-                  // });
+                        });
+                      }
+                  });
+                              
                 }
               }
             );
@@ -293,12 +248,12 @@ app.put("/api/staff/:id", (req, res) => {
                   
                   if (manager !== null) {
                     console.log(manager.directReports);
-                    let newManager = Object.assign({}, manager._doc);
-                    newManager.directReports = newManager.directReports.filter(
-                    // manager.directReports = manager.directReports.filter(
+                    // let newManager = Object.assign({}, manager._doc);
+                    // newManager.directReports = newManager.directReports.filter(
+                    manager.directReports = manager.directReports.filter(
                       m => m !== req.params.id
                     );
-                    console.log(newManager.directReports);
+                    console.log(manager.directReports);
                     // console.log(obj.manager);
                     // Staff.findOneAndUpdate(
                     // Staff.findById(
@@ -309,8 +264,8 @@ app.put("/api/staff/:id", (req, res) => {
                         // if (err) {
                           // res.status(500).json(err);
                         // } else {
-                          // manager.save(
-                          newManager.save(
+                          manager.save(
+                          // newManager.save(
                             err => {
                               if (err) {
                                 res.status(500).json(err);
@@ -345,9 +300,9 @@ app.put("/api/staff/:id", (req, res) => {
                   // console.log(manager);
                   console.log(obj._id);
                   if (manager !== null) {
-                    let newManager = Object.assign({}, manager._doc);
-                    newManager.directReports = [
-                      ...newManager.directReports,
+                    // let newManager = Object.assign({}, manager._doc);
+                    manager.directReports = [
+                      ...manager.directReports,
                       obj._id
                     ];
                     // Staff.findOneAndUpdate(
@@ -360,7 +315,7 @@ app.put("/api/staff/:id", (req, res) => {
                           // res.status(500).json(err);
                         // } else {
                           
-                          newManager.save(
+                          manager.save(
                             err => {
                               if (err) {
                                 res.status(500).json(err);

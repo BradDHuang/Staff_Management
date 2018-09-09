@@ -41,9 +41,9 @@ class EditPage extends Component {
       title: "",
       sex: "",
       email: "",
-      officePhone: null,
-      cellPhone: null,
-      manager: null,
+      officePhone: 0,
+      cellPhone: 0,
+      manager: "",
       redirect: false,
       invalid: [],
     };

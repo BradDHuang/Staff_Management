@@ -14,7 +14,10 @@ var StaffSchema = new Schema({
     title: String,
     sex: String,
     avatar: String,
-    manager: String,
+    manager: {
+        type: String,
+        default: null,
+    },
     directReports: [String],
     officePhone: Number,
     cellPhone: Number,
