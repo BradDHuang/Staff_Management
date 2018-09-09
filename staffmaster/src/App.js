@@ -23,7 +23,7 @@ class App extends Component {
             <StaffModal />
             <Route path="/" exact={true} component={StaffList} />
             <Route path="/api/staff/:id" component={DetailPage} />
-            <Route path="/report" component={ReportList} />
+            <Route path="/directReportsList" component={ReportList} />
             <Route path="/edit" component={EditPage} />
           </Container>
         </div>

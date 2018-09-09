@@ -3,8 +3,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const fs = require("fs");
-const multer = require("multer");
+// const fs = require("fs");
+// const multer = require("multer");
 
 const port = 8081;
 
@@ -19,11 +19,11 @@ app.use(cors());
 
 mongoose.connect("mongodb://staffmaster:password123@ds237832.mlab.com:37832/staffmaster");
 
-var upload = multer({ dest: "./uploads/",
-  rename:  (fieldname, filename) => {
-    return filename;
-  },
-});
+// var upload = multer({ dest: "./uploads/",
+//   rename:  (fieldname, filename) => {
+//     return filename;
+//   },
+// });
 
 app.get("/api/staff", (req, res) => {
     Staff.find((err, staff) => {
@@ -36,26 +36,26 @@ app.get("/api/staff", (req, res) => {
     });
 });
 
-app.post("/api/staff", upload.single('image'), (req, res) => {
+app.post("/api/staff", (req, res) => {
     console.log("Created a new member.");
     
     console.log(req.body);
-    console.log(req.files);
+    // console.log(req.files);
     console.log(req.body.manager);
-    let newM = new Staff();
-    newM.fullName = req.body.fullName;
-    newM.title = req.body.title;
-    newM.sex = req.body.sex;
-    newM.manager = req.body.manager;
-    newM.officePhone = req.body.officePhone;
-    newM.cellPhone = req.body.cellPhone;
+    // let newM = new Staff();
+    // newM.fullName = req.body.fullName;
+    // newM.title = req.body.title;
+    // newM.sex = req.body.sex;
+    // newM.manager = req.body.manager;
+    // newM.officePhone = req.body.officePhone;
+    // newM.cellPhone = req.body.cellPhone;
     
-    newM.image.data = fs.readFileSync(req.files.userPhoto.path);
-    newM.image.contentType = "image/jpg";
+    // newM.image.data = fs.readFileSync(req.files.userPhoto.path);
+    // newM.image.contentType = "image/jpg";
     
     if (!req.body.manager) {
-    // Staff.create(req.body, (err, staff) => {
-    newM.save(err => {
+    Staff.create(req.body, (err, staff) => {
+    // newM.save(err => {
       if (err) {
         res.status(500).json(err);
       } else {
@@ -69,12 +69,11 @@ app.post("/api/staff", upload.single('image'), (req, res) => {
       }
     });
     } else {
-      let newBody = req.body;
-      newBody.image.data = fs.readFileSync(req.files.userPhoto.path);
-      newBody.image.contentType = "image/jpg";
+      // newBody.image.data = fs.readFileSync(req.files.userPhoto.path);
+      // newBody.image.contentType = "image/jpg";
       // update the manager's d.r.s
       // Staff.create(req.body, (err, staff) => {
-      Staff.create(newBody, (err, staff) => {
+      Staff.create(req.body, (err, staff) => {
       // newM.save(err => {
         if (err) {
           res.status(500).json(err);

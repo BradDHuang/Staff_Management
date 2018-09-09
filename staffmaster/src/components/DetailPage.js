@@ -34,14 +34,15 @@ class DetailPage extends Component {
         return this.state.redirect ? (<Redirect to={{ pathname: "/" }} />) : 
             !this.props.detail.detail ? null :    
         (
-            <div>
+            <div style={{ width: "400px" }}>
                 <div>
-                    <h4>Staff Detail:</h4>
-                    
-                    <Link to="/">
-                        <Button type="button" className="btn">Home</Button>
+                    <Link to="/" style={{color: "black"}}>
+                        <h3>
+                            <i className="fas fa-angle-left" />
+                            {" "}Staff 
+                        </h3>
                     </Link>
-                    {" "}
+                    
                     <Link to="/edit">
                         <Button type="button" className="btn btn-info">Edit</Button>
                     </Link>
@@ -77,7 +78,7 @@ class DetailPage extends Component {
                     <hr />
                     <Link to={
                       this.props.detail.directReports.length > 0
-                        ? "/report"
+                        ? "/directReportsList"
                         : `${this.props.match.url}`
                       }
                       style={{color: "deepskyblue"}}

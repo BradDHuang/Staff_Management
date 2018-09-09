@@ -1,6 +1,6 @@
 
 import React, {Component} from "react";
-import { Container, ListGroup, ListGroupItem, Input, Label,} from "reactstrap";
+import { Container, ListGroup, ListGroupItem, Input, } from "reactstrap";
 // import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { connect } from "react-redux";
 import { getStaff } from "../actions/staffActions";
@@ -77,7 +77,6 @@ class StaffList extends Component {
                 <h1>Staff Directory</h1>
                 <hr />
                     <div style={{ width: "400px" }}>
-                        <Label for="search">Search:</Label>
                         <Input type="text" value={this.state.search} 
                             onChange={this.handleSearch}
                             id="search"
