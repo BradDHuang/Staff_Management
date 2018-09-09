@@ -81,6 +81,7 @@ class StaffList extends Component {
                         <Input type="text" value={this.state.search} 
                             onChange={this.handleSearch}
                             id="search"
+                            placeholder="search..."
                         />
                     </div>
                 <hr />

@@ -12,6 +12,8 @@ import {
 } from "reactstrap";
 import {connect} from "react-redux";
 import {addStaff} from "../actions/staffActions";
+import axios from "axios";
+// import qs from "qs";
 
 class StaffModal extends Component {
     constructor(props) {
@@ -28,6 +30,7 @@ class StaffModal extends Component {
             cellPhone: null,
             email: "",
             errMsg: false,
+            profilePic: null,
         };
     }
     toggle = () => {
@@ -37,6 +40,24 @@ class StaffModal extends Component {
         // console.log(e.target.name);
         this.setState({ [e.target.name]: e.target.value });
         this.setState({ errMsg: false });
+    }
+    handleProfilePic = (e) => {
+        // console.log(e.target.files[0]);
+        this.setState({ profilePic: e.target.files[0] });
+    }
+    handleProfilePicUpload = () => {
+        const fd = new FormData();
+        fd.append("image", this.state.profilePic, this.state.profilePic.name);
+        // console.log(fd);
+        // console.log(typeof(fd)); // object
+        
+        axios.post("https://personnel-management-happitt.c9users.io:8081/api/staff", fd)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
     onSubmit = (e) => {
         e.preventDefault();
@@ -84,6 +105,15 @@ class StaffModal extends Component {
                             onSubmit={this.onSubmit}
                         >
                             <FormGroup>
+                                <Input  type="file"  
+                                    onChange={this.handleProfilePic}
+                                />
+                                <br />
+                                <Button
+                                    onClick={this.handleProfilePicUpload}
+                                >Upload Profile Pic
+                                </Button>
+                                <hr />
                                 <Label for="fn">Full Name
                                 </Label>
                                 {this.state.errMsg &&
