@@ -41,8 +41,8 @@ class EditPage extends Component {
       title: "",
       sex: "",
       email: "",
-      officePhone: 0,
-      cellPhone: 0,
+      officePhone: "",
+      cellPhone: "",
       manager: "",
       redirect: false,
       invalid: [],
@@ -166,7 +166,7 @@ class EditPage extends Component {
               name="manager"
               value={this.state.manager}
             >
-              <option value="">none</option>
+              <option value="">None</option>
               {this.props.staff.staff ? this.props.staff.staff.map((manager, index) => {
                 if (manager._id !== this.props.detail.detail._id) {
                   if (this.state.invalid.includes(manager._id)) {

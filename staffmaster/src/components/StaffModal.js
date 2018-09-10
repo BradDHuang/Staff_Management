@@ -189,7 +189,7 @@ class StaffModal extends Component {
                                     id="manager"
                                     onChange={this.onChange}
                                 >
-                                    <option value={null}>None</option>
+                                    <option value="">None</option>
                                     {
                                         this.props.staff.staff.map((manager, index) => {
                                             return <option key={index} value={manager._id}>{manager.fullName}</option>;

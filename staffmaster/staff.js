@@ -16,7 +16,7 @@ var StaffSchema = new Schema({
     avatar: String,
     manager: {
         type: String,
-        default: null,
+        default: "",
     },
     directReports: [String],
     officePhone: Number,

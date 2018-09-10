@@ -36,13 +36,16 @@ class DetailPage extends Component {
         (
             <div style={{ width: "400px" }}>
                 <div>
-                    <Link to="/" style={{color: "black"}}>
-                        <h3>
-                            <i className="fas fa-angle-left" />
-                            {" "}Staff 
-                        </h3>
-                    </Link>
-                    
+                    <div style={{ display: "flex" }} >
+                        <div style={{ paddingRight: "180px", fontSize: "200%" }}>
+                            <Link to="/" style={{color: "black"}}>
+                                <i className="fas fa-angle-left" />
+                            </Link>
+                        </div>
+                        <div style={{ fontSize: "150%" }}>
+                            Staff
+                        </div>
+                    </div>
                     <Link to="/edit">
                         <Button type="button" className="btn btn-info">Edit</Button>
                     </Link>

@@ -41,7 +41,7 @@ app.post("/api/staff", (req, res) => {
     
     console.log(req.body);
     // console.log(req.files);
-    console.log(req.body.manager);
+    console.log((req.body.manager === ""));
     // let newM = new Staff();
     // newM.fullName = req.body.fullName;
     // newM.title = req.body.title;
@@ -82,6 +82,7 @@ app.post("/api/staff", (req, res) => {
             if (err) {
               res.status(500).json(err);
             } else {
+              console.log(staff._id);
               manager.directReports = [
                 ...manager.directReports,
                 staff._id
@@ -187,7 +188,8 @@ app.put("/api/staff/:id", (req, res) => {
           // https://stackoverflow.com/questions/32397419/model-findone-not-returning-docs-but-returning-a-wrapper-object
           let obj = staff._doc; // .toObject()
           // console.log(typeof(staff)); // object
-          console.log(obj.manager, req.body.manager);
+          console.log(obj.manager);
+          console.log((req.body.manager === ""));
           // manager unchange: A -> A, or none -> none.
           if (obj.manager === req.body.manager) {
             // Staff.findOneAndUpdate(
@@ -239,7 +241,7 @@ app.put("/api/staff/:id", (req, res) => {
             // manager changed: A / null -> B / null
             // delete prev manager (A)
             console.log(staff.manager);
-            if (staff.manager !== null) {
+            if (staff.manager !== "") {
               // console.log(obj.manager);
               Staff.findById(obj.manager, (err, manager) => {
                 if (err) {
@@ -255,15 +257,7 @@ app.put("/api/staff/:id", (req, res) => {
                     );
                     console.log(manager.directReports);
                     // console.log(obj.manager);
-                    // Staff.findOneAndUpdate(
-                    // Staff.findById(
-                      // obj.manager,
-                      
-                      // newManager,
-                      // (err, manager) => {
-                        // if (err) {
-                          // res.status(500).json(err);
-                        // } else {
+                    
                           manager.save(
                           // newManager.save(
                             err => {
@@ -276,15 +270,19 @@ app.put("/api/staff/:id", (req, res) => {
                                     } else {
                                       console.log("updated manager info.");
                                       console.log(m.fullName);
-                                      
+                                      Staff.find((err, staff) => {
+                                        if (err) {
+                                          res.status(500).json(err);
+                                        } else {
+                                          res.status(200).json({ staff });
+                                        }
+                                      });
                                     }
                                 });
                               }
                           }
                           );
-                        // }
-                      // }
-                    // );
+                        
                   }
                 }
               });
@@ -292,7 +290,7 @@ app.put("/api/staff/:id", (req, res) => {
 
             // update new manager's (B's) directReports
             // console.log(req.body.manager);
-            if (req.body.manager !== null) {
+            if (req.body.manager !== "") {
               Staff.findById(req.body.manager, (err, manager) => {
                 if (err) {
                   res.status(500).json(err);
@@ -305,6 +303,7 @@ app.put("/api/staff/:id", (req, res) => {
                       ...manager.directReports,
                       obj._id
                     ];
+                    console.log(manager.directReports);
                     // Staff.findOneAndUpdate(
                     // Staff.findById(
                       // req.body.manager,
@@ -320,22 +319,23 @@ app.put("/api/staff/:id", (req, res) => {
                               if (err) {
                                 res.status(500).json(err);
                               } else {
-                                Staff.findById(req.body.manager, (err, staff) => {
-                                    if (err) {
-                                      res.status(500).json(err);
-                                    } else {
+                                // Staff.findById(req.body.manager, (err, staff) => {
+                                //     if (err) {
+                                //       res.status(500).json(err);
+                                //     } else {
                                       console.log("updated new manager's d.r. info.");
-                                      console.log(staff.fullName);
+                                //       console.log(staff.fullName);
                                       
                                       Staff.find((err, staff) => {
                                         if (err) {
                                           res.status(500).json(err);
                                         } else {
                                           res.status(200).json({ staff });
+                                          // Can't set headers after they are sent.
                                         }
                                       });
-                                    }
-                                });
+                                //     }
+                                // });
                               }
                           }
                           );
@@ -367,10 +367,11 @@ app.delete("/api/staff/:id", (req, res) => {
         if (staff !== null) {
           let obj = staff._doc;
           console.log(obj);
+          console.log((obj.manager === ""));
           
           // the staff has a manager?
           // if yes, and the staff is to be deleted, then the manager's info should be updated.
-          if (obj.manager !== null) {
+          if (obj.manager !== "") {
             Staff.findById(obj.manager, (err, manager) => {
               if (err) {
                 res.status(500).json(err);
@@ -537,7 +538,8 @@ app.delete("/api/staff/:id", (req, res) => {
               }
             });
           } else {
-            Staff.remove(
+            // Staff.remove(
+            Staff.deleteOne(
               {_id: req.params.id}, err => {
                 if (err) {
                   res.status(500).json(err);
