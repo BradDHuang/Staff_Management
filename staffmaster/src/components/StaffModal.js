@@ -25,7 +25,7 @@ class StaffModal extends Component {
             sex: "",
             // avatar: "",
             manager: "",
-            // directReports: [String],
+            directReports: [],
             officePhone: null,
             cellPhone: null,
             email: "",
@@ -68,7 +68,8 @@ class StaffModal extends Component {
             manager: this.state.manager,
             officePhone: this.state.officePhone,
             cellPhone: this.state.cellPhone,
-            email: this.state.email
+            email: this.state.email,
+            directReports: this.state.directReports,
         };
         if (this.state.fullName) {
             console.log(newMember);
