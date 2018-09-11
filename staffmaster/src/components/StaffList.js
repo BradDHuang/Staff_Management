@@ -90,15 +90,15 @@ class StaffList extends Component {
                         </i>
                     </h1>
                 </div>
-                <hr />
-                    <div style={{ width: "400px" }}>
-                        <Input type="text" value={this.state.search} 
-                            onChange={this.handleSearch}
-                            id="search"
-                            placeholder="search..."
-                        />
-                    </div>
-                <hr />
+                <div style={{ width: "400px" }}>
+                    <hr />
+                    <Input type="text" value={this.state.search} 
+                        onChange={this.handleSearch}
+                        id="search"
+                        placeholder="search..."
+                    />
+                    <hr />
+                </div>
                 <ListGroup>
                         {staff.map((member, index) => {
                             

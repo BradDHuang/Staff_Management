@@ -92,7 +92,7 @@ class EditPage extends Component {
     return this.state.redirect ? (
       <Redirect to={{ pathname: "/" }} />
     ) : (
-      <div>
+      <div style={{ width: "400px" }}>
         <h3>Edit Page</h3>
         <Form onSubmit={this.onSubmit}>
           <FormGroup>

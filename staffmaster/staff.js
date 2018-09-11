@@ -18,7 +18,10 @@ var StaffSchema = new Schema({
         type: String,
         default: "",
     },
-    directReports: [String],
+    directReports: {
+        type: [String],
+        default: [],
+    },
     officePhone: Number,
     cellPhone: Number,
     email: String,

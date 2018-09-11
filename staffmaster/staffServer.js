@@ -59,6 +59,7 @@ app.post("/api/staff", (req, res) => {
       if (err) {
         res.status(500).json(err);
       } else {
+        console.log("created a new staff member Without manager.");
         Staff.find((err, staff) => {
           if (err) {
             res.status(500).json(err);
@@ -78,6 +79,7 @@ app.post("/api/staff", (req, res) => {
         if (err) {
           res.status(500).json(err);
         } else {
+          console.log("created a new staff member With manager.");
           Staff.findById(req.body.manager, (err, manager) => {
             if (err) {
               res.status(500).json(err);
@@ -124,7 +126,7 @@ app.get("/api/staff/:id", (req, res) => {
             // console.log(staff.id === staff._id.toString()); // true
             let dr = staff.directReports;
             let manager = staff.manager;
-            // console.log(manager);
+            console.log(`GET the details of "${staff.fullName}".`);
             Staff.find((err, members) => {
                 if (err) {
                     res.status(500).json(err);
@@ -170,118 +172,132 @@ app.put("/api/staff/:id", (req, res) => {
 // edit an existing member
 app.put("/api/staff/:id", (req, res) => {
     
-    // console.log(req.params.id);
-//   Staff.findOneAndUpdate(
-    Staff.findById(
+  console.log(`Editing the member with id: ${req.params.id}.`);
+  
+  Staff.findById(
     req.params.id,
-    // req.body,
     (err, staff) => {
       if (err) {
         res.status(500).json(err);
       } else {
         
         if (staff != null) {
-          
-        //   console.log(req.body);
-        //   console.log(staff);
+          console.log(`the member's fullName with the id is "${staff.fullName}".`);
         
           // https://stackoverflow.com/questions/32397419/model-findone-not-returning-docs-but-returning-a-wrapper-object
           let obj = staff._doc; // .toObject()
           // console.log(typeof(staff)); // object
-          console.log(obj.manager);
-          console.log((req.body.manager === ""));
-          // manager unchange: A -> A, or none -> none.
+          console.log(`the (former) manager is "None"? ${(obj.manager === "")}`);
+          console.log(`the (new) manager is "None"? ${(req.body.manager === "")}`);
+          console.log(`the (former) manager's id is ${obj.manager}.`);
+          console.log(`the (new) manager's id is ${req.body.manager}.`);
+          
           if (obj.manager === req.body.manager) {
-            // Staff.findOneAndUpdate(
-            // console.log(req.params.id);
-            Staff.findById(
-              req.params.id,
-            //   req.body,
-              (err, staff) => {
-                  // console.log(staff);
-                if (err) {
-                  res.status(500).json(err);
-                } else {
-                
-                  staff.fullName = req.body.fullName;
-                  staff.title = req.body.title;
-                  staff.sex = req.body.sex;
-                  staff.officePhone = req.body.officePhone;
-                  staff.cellPhone = req.body.cellPhone;
-                  staff.email = req.body.email;
-                  staff.manager = req.body.manager;
-                  // console.log(staff);
-                  staff.save(err => {
-                      if (err) {
-                        res.status(500).json(err);
-                      } else {
-                        
-                        Staff.findById(req.params.id, (err, staff) => {
-                            if (err) {
-                              res.status(500).json(err);
-                            } else {
-                              console.log("edited a staff member's info.");
-                              console.log(staff);
-                              Staff.find((err, staff) => {
-                                if (err) {
-                                  res.status(500).json(err);
-                                } else {
-                                  res.status(200).json({ staff });
-                                }
-                              });
-                            }
-                        });
-                      }
-                  });
-                              
-                }
-              }
-            );
-          } else {
-            // manager changed: A / null -> B / null
-            // delete prev manager (A)
-            console.log(staff.manager);
-            if (staff.manager !== "") {
-              // console.log(obj.manager);
-              Staff.findById(obj.manager, (err, manager) => {
+            
+            console.log("The manager doesn't change: A -> A, or none -> none.");
+            
+            staff.fullName = req.body.fullName;
+            staff.title = req.body.title;
+            staff.sex = req.body.sex;
+            staff.officePhone = req.body.officePhone;
+            staff.cellPhone = req.body.cellPhone;
+            staff.email = req.body.email;
+            staff.manager = req.body.manager;
+            staff.directReports = req.body.directReports;
+            // console.log(staff);
+            staff.save(err => {
                 if (err) {
                   res.status(500).json(err);
                 } else {
                   
+                  Staff.findById(req.params.id, (err, staff) => {
+                      if (err) {
+                        res.status(500).json(err);
+                      } else {
+                        console.log(`edited the info of "${staff.fullName}".`);
+                        // console.log(staff);
+                        Staff.find((err, staff) => {
+                          if (err) {
+                            res.status(500).json(err);
+                          } else {
+                            res.status(200).json({ staff });
+                          }
+                        });
+                      }
+                  });
+                }
+            });
+                 
+          } else {
+            
+            console.log("manager changed: A / none -> B, or A -> none.");
+            
+            console.log(`the staff's (former) manager is "None"? ${(obj.manager === "")}`);
+            if (obj.manager !== "") {
+              console.log(`the staff's (former) manager's id is ${obj.manager}.`);
+              Staff.findById(obj.manager, (err, manager) => {
+                if (err) {
+                  res.status(500).json(err);
+                } else {
+                  console.log(`deleting the directReport of ${obj.fullName}'s prev manager: ${manager.fullName}.`);
                   if (manager !== null) {
-                    console.log(manager.directReports);
-                    // let newManager = Object.assign({}, manager._doc);
-                    // newManager.directReports = newManager.directReports.filter(
+                    console.log(`${manager.fullName}'s (former) directReports is: ${manager.directReports}.`);
+                    
                     manager.directReports = manager.directReports.filter(
                       m => m !== req.params.id
                     );
-                    console.log(manager.directReports);
-                    // console.log(obj.manager);
+                    console.log(`${manager.fullName}'s (new) directReports is: ${manager.directReports}.`);
                     
-                          manager.save(
-                          // newManager.save(
-                            err => {
+                      manager.save(
+                        err => {
+                          if (err) {
+                            res.status(500).json(err);
+                          } else {
+                            Staff.findById(obj.manager, (err, m) => {
                               if (err) {
                                 res.status(500).json(err);
                               } else {
-                                Staff.findById(obj.manager, (err, m) => {
+                                console.log(`updated the directReports of (former) manager: ${m.fullName}.`);
+                                
+                                Staff.findById(
+                                  req.params.id,
+                                  (err, obj) => {
                                     if (err) {
                                       res.status(500).json(err);
                                     } else {
-                                      console.log("updated manager info.");
-                                      console.log(m.fullName);
-                                      Staff.find((err, staff) => {
+                                      obj.fullName = req.body.fullName;
+                                      obj.title = req.body.title;
+                                      obj.sex = req.body.sex;
+                                      obj.officePhone = req.body.officePhone;
+                                      obj.cellPhone = req.body.cellPhone;
+                                      obj.email = req.body.email;
+                                      obj.manager = req.body.manager;
+                                      obj.directReports = req.body.directReports;
+                                      
+                                      obj.save(err => {
                                         if (err) {
                                           res.status(500).json(err);
                                         } else {
-                                          res.status(200).json({ staff });
+                                          
+                                          Staff.findById(req.params.id, (err, staff) => {
+                                              if (err) {
+                                                res.status(500).json(err);
+                                              } else {
+                                                console.log(`edited the info of "${staff.fullName}".`);
+                                                // console.log(staff);
+                                                
+                                              }
+                                          });
                                         }
                                       });
                                     }
-                                });
+                                  });
+                                
                               }
-                          }
-                          );
+                          });
+                        }
+                      }
+                    );
                         
                   }
                 }
@@ -289,64 +305,102 @@ app.put("/api/staff/:id", (req, res) => {
             }
 
             // update new manager's (B's) directReports
-            // console.log(req.body.manager);
+            console.log(`the staff's (new) manager is "None"? ${(req.body.manager === "")}`);
             if (req.body.manager !== "") {
+              console.log(`the staff's (new) manager's id is ${req.body.manager}.`);
               Staff.findById(req.body.manager, (err, manager) => {
                 if (err) {
                   res.status(500).json(err);
                 } else {
-                  // console.log(manager);
-                  console.log(obj._id);
+                  console.log(`updating the directReports of ${obj.fullName}'s new manager: ${manager.fullName}.`);
+                  console.log(`this id (${obj._id}) is to be added to the directReports.`);
                   if (manager !== null) {
-                    // let newManager = Object.assign({}, manager._doc);
+                    console.log(`${manager.fullName}'s (former) directReports is: ${manager.directReports}.`);
                     manager.directReports = [
                       ...manager.directReports,
                       obj._id
                     ];
-                    console.log(manager.directReports);
-                    // Staff.findOneAndUpdate(
-                    // Staff.findById(
-                      // req.body.manager,
-                      
-                      // newManager,
-                      // (err, manager) => {
-                        // if (err) {
-                          // res.status(500).json(err);
-                        // } else {
-                          
-                          manager.save(
-                            err => {
-                              if (err) {
-                                res.status(500).json(err);
-                              } else {
-                                // Staff.findById(req.body.manager, (err, staff) => {
-                                //     if (err) {
-                                //       res.status(500).json(err);
-                                //     } else {
-                                      console.log("updated new manager's d.r. info.");
-                                //       console.log(staff.fullName);
-                                      
-                                      Staff.find((err, staff) => {
-                                        if (err) {
-                                          res.status(500).json(err);
-                                        } else {
-                                          res.status(200).json({ staff });
-                                          // Can't set headers after they are sent.
-                                        }
-                                      });
-                                //     }
-                                // });
-                              }
+                    console.log(`${manager.fullName}'s (new) directReports is: ${manager.directReports}.`);
+                    
+                      manager.save(
+                        err => {
+                          if (err) {
+                            res.status(500).json(err);
+                          } else {
+                            Staff.findById(req.body.manager, (err, m) => {
+                                if (err) {
+                                  res.status(500).json(err);
+                                } else {
+                                  
+                                  console.log(`updated the directReports of (new) manager: ${m.fullName}.`);
+                                  
+                                  Staff.findById(
+                                    req.params.id,
+                                    (err, obj) => {
+                                      if (err) {
+                                        res.status(500).json(err);
+                                      } else {
+                                        obj.fullName = req.body.fullName;
+                                        obj.title = req.body.title;
+                                        obj.sex = req.body.sex;
+                                        obj.officePhone = req.body.officePhone;
+                                        obj.cellPhone = req.body.cellPhone;
+                                        obj.email = req.body.email;
+                                        obj.manager = req.body.manager;
+                                        obj.directReports = req.body.directReports;
+                                        
+                                        obj.save(err => {
+                                          if (err) {
+                                            res.status(500).json(err);
+                                          } else {
+                                            
+                                            Staff.findById(req.params.id, (err, staff) => {
+                                                if (err) {
+                                                  res.status(500).json(err);
+                                                } else {
+                                                  console.log(`edited the info of "${staff.fullName}".`);
+                                                  console.log("******");
+                                                  console.log("manager changed: A / none -> B.");
+                                                  console.log("******");
+                                                  Staff.find((err, staff) => {
+                                                    if (err) {
+                                                      res.status(500).json(err);
+                                                    } else {
+                                                      res.status(200).json({ staff });
+                                                    }
+                                                  });
+                                                }
+                                            });
+                                          }
+                                        });
+                                      }
+                                    });
+            
+                                }
+                            });
                           }
-                          );
-                          
-                        // }
-                      // }
-                    // );
+                        }
+                      );
+                         
                   }
                 }
               });
+            } else {
+              setTimeout(() => { 
+                console.log("******");
+                console.log("manager changed: A -> none.");
+                console.log("******");
+                Staff.find((err, staff) => {
+                  if (err) {
+                    res.status(500).json(err);
+                  } else {
+                    res.status(200).json({ staff });
+                  }
+                });
+              }, 500);
+              
             }
+            
           }
         }
       }
