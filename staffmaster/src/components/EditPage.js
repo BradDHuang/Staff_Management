@@ -85,6 +85,11 @@ class EditPage extends Component {
     };
     console.log(this.state._id, member);
     this.props.dispatch(actions.editStaff(this.state._id, member));
+    // ***
+    // Async problem:
+    // the "redirect" should wait until the dispatch finished!
+    // Consider use Callback.
+    // *** 
     this.setState({redirect: true});
   };
 
