@@ -1,0 +1,24 @@
+
+// This file contains notes for review purpose.
+
+
+Only Class Component has state, functional Component does not.
+
+setState() may be asynchronous.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
