@@ -28,6 +28,11 @@ class App extends Component {
     this.setState({ number: this.state.number * 2 });
   }
   
+  showAlert = () => {
+    console.log(this); // App {...}
+    alert("this is an alert!");
+  }
+  
   render() {
     console.log(this.state);
     return (
@@ -35,6 +40,7 @@ class App extends Component {
         <Text text={"A string"} />
         <h1>{this.state.number}</h1>
         <button onClick={this.double}>Double</button>
+        <button onClick={this.showAlert}>Show Alert</button> 
       </div>
     );
   }

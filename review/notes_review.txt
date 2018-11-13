@@ -6,8 +6,30 @@ Only Class Component has state, functional Component does not.
 
 setState() may be asynchronous.
 
+Only class component has life cycle methods.
 
 
+The bodies of class declarations and class expressions are executed 
+in strict mode, 
+that is the constructor, static and prototype methods. 
+Getter and setter functions are executed in strict mode.
+
+// e.g.
+    function display(){
+        console.log(this); // 'this' will point to the global object
+    }
+    display(); 
+
+This is a plain function call. 
+The value of this inside the display() method in this case 
+is the window — or the global — object in non-strict mode. 
+
+    In strict mode, 
+    the this value is 
+    undefined.
+
+// ref: 
+    https://medium.freecodecamp.org/this-is-why-we-need-to-bind-event-handlers-in-class-components-in-react-f7ea1a6f93eb
 
 
 
