@@ -33,6 +33,13 @@ class App extends Component {
     alert("this is an alert!");
   }
   
+  inputChange = e => {
+    // console.log(e); // Event
+    // console.log(e.target); // <input>
+    console.log(e.target.value);
+    // console.log(typeof e.target.value); // string
+  }
+  
   render() {
     console.log(this.state);
     return (
@@ -41,6 +48,7 @@ class App extends Component {
         <h1>{this.state.number}</h1>
         <button onClick={this.double}>Double</button>
         <button onClick={this.showAlert}>Show Alert</button> 
+        <input onChange={this.inputChange} />
       </div>
     );
   }
